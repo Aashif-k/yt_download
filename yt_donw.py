@@ -28,7 +28,7 @@ def yt_down(link):
         print(f'Error: {e}')
 def main():
     link=st.text_input("",placeholder="enter the url of the video")
-    if link==Null:
+    if link=="":
         print("please provide link")
     else:
         yt_down(link)
