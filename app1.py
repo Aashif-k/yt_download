@@ -1,6 +1,6 @@
 import streamlit as st
 from pytube import YouTube
-from moviepy.editor import AudioFileClip
+from pydub import AudioSegment
 import os
 
 # Streamlit app title
@@ -22,11 +22,10 @@ def download_mp3(url):
         # Download the audio stream
         audio_file = audio_stream.download(output_path="downloads")
 
-        # Convert the downloaded file to MP3
+        # Convert the downloaded file to MP3 using pydub
         mp3_file = os.path.splitext(audio_file)[0] + ".mp3"
-        audio_clip = AudioFileClip(audio_file)
-        audio_clip.write_audiofile(mp3_file)
-        audio_clip.close()
+        audio = AudioSegment.from_file(audio_file)
+        audio.export(mp3_file, format="mp3")
 
         # Remove the original downloaded file
         os.remove(audio_file)
