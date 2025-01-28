@@ -82,7 +82,7 @@ if add_selectbox == 'audio':
 
                 save_dir = 'output/.mp3'
                 os.makedirs('output', exist_ok = True)
-                file = audio.downloutput_path = save_dir)
+                file = audio.download(output_path = save_dir)
                 st.success("Download completed successfully")
             except Exception as e:
                 st.error(f"An error occurred: {e}")
