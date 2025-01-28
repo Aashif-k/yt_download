@@ -31,6 +31,6 @@ def main():
     if link==Null:
         print("please provide link")
     else:
-    yt_down(link)
+        yt_down(link)
 if __name__=='__main__':
   main()
