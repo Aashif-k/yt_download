@@ -2,7 +2,7 @@ import streamlit as st
 from pytube import YouTube
 from pydub import AudioSegment
 import os
-
+AudioSegment.converter = "/path/to/ffmpeg" 
 # Streamlit app title
 st.title("YouTube to MP3 Downloader")
 
