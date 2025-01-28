@@ -1,90 +1,57 @@
-from pytube import YouTube
-import os
 import streamlit as st
-with st.sidebar:
-    st.title('YouTube Downloader')
+from pytube import YouTube
+from moviepy.editor import AudioFileClip
+import os
 
-    add_selectbox = st.sidebar.selectbox(
-    "Select what you want to download?",
-    ("Video", "audio"))
+# Streamlit app title
+st.title("YouTube to MP3 Downloader")
 
-    st.markdown ('''
-    ## About 
-    You can now download your favorite media from YouTube by just providing the YouTube link to it;
-    and selecting to download the video 
-    or audio file of the media provided:
+# Input field for YouTube URL
+youtube_url = st.text_input("Enter the YouTube video URL:")
 
-    - [streamlit](https://streamlit.io)             
-    - [pytube](https://pytube.io/)             
+# Function to download and convert YouTube video to MP3
+def download_mp3(url):
+    try:
+        # Fetch the YouTube video
+        yt = YouTube(url)
+        st.write(f"Downloading: {yt.title}")
 
-    ''')
+        # Get the highest quality audio stream
+        audio_stream = yt.streams.filter(only_audio=True).first()
 
-def Download():
-    #add radio buttons and modify codes to allow user select the type of file needed
-    # this will add a header to the streamlit app
-    st.header("Youtube downloader")
-    if add_selectbox == 'Video':
+        # Download the audio stream
+        audio_file = audio_stream.download(output_path="downloads")
 
-        # this brings up an input box for the url
-        youtube_url = st.text_input("Enter the YouTube URL")
+        # Convert the downloaded file to MP3
+        mp3_file = os.path.splitext(audio_file)[0] + ".mp3"
+        audio_clip = AudioFileClip(audio_file)
+        audio_clip.write_audiofile(mp3_file)
+        audio_clip.close()
 
-        # the st.radio brings up selection buttons for selectiong video resolution
-        genre = st.radio(
-                    "Select the resolution you will like to download",
-                    ["Highest Resolution", "720p", "480p", "360p", "240p", "144p"]
-                    )
-        # this brings up a download button you can click on to initiate video download
-        if st.button("Download video"):
-                try:
-                    youtubeObject = YouTube(youtube_url)
+        # Remove the original downloaded file
+        os.remove(audio_file)
 
+        st.success("Download and conversion complete!")
+        return mp3_file
 
-                    if genre == "Highest Resolution":
-                        youtubeObject = youtubeObject.streams.get_highest_resolution()
-                    elif genre == "720p":
-                        youtubeObject = youtubeObject.streams.get_by_resolution("720p")
-                    elif genre == "480p":
-                        youtubeObject = youtubeObject.streams.get_by_resolution("480p")
-                    elif genre == "360p":
-                        youtubeObject = youtubeObject.streams.get_by_resolution("360p")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        return None
 
-                    else:
-                        youtubeObject = youtubeObject.streams.get_by_resolution("144p")
-                     # creates a directory for downloads   
-                    if youtubeObject:  
-                        save_dir = 'output/.mp4'
-                        os.makedirs('output', exist_ok=True)
-                        youtubeObject.download(output_path=save_dir)
-                        st.success("Download completed successfully.")
-                    else:
-                        st.error("No suitable video stream found for the selected resolution, try another resolution")
-
-                except Exception as e:
-                    st.error(f"An error occurred: {e}")
-
-
-if add_selectbox == 'audio':
-        youtube_url = st.text_input("Enter the YouTube URL")
-
-        if st.button("Download audio"):
-
-            try:
-                file = ""
-
-                youtubeObject = YouTube(youtube_url)
-                audio = youtubeObject.streams.filter(only_audio = True).first()
-
-                title = os.path.basename(file)[:-4]
-
-                save_dir = 'output/.mp3'
-                os.makedirs('output', exist_ok = True)
-                file = audio.download(output_path = save_dir)
-                st.success("Download completed successfully")
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-
-
-
-if __name__ == '__main__':
-    Download()   
-
+# Download button
+if st.button("Download MP3"):
+    if youtube_url:
+        mp3_file = download_mp3(youtube_url)
+        if mp3_file:
+            # Provide a download link for the MP3 file
+            with open(mp3_file, "rb") as file:
+                st.download_button(
+                    label="Download MP3",
+                    data=file,
+                    file_name=os.path.basename(mp3_file),
+                    mime="audio/mpeg"
+                )
+            # Clean up the MP3 file after download
+            os.remove(mp3_file)
+    else:
+        st.warning("Please enter a valid YouTube URL.")
