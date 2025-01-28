@@ -27,7 +27,7 @@ def yt_down(video_url):
         print(f'Conversion complete! Saved as: {audio_file}')
     except Exception as e:
         print(f'Error: {e}')
-    def main():
-        yt_down(link)
+def main():
+    yt_down(link)
 if __name__=='__main__':
   main()
