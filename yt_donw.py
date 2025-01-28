@@ -27,7 +27,7 @@ def yt_down(link):
     except Exception as e:
         print(f'Error: {e}')
 def main():
-    link=st.text_input("",placeholder="enter the url of the video")
+    link=st.text_input("enter url ",placeholder="enter the url of the video")
     if link=="":
         print("please provide link")
     else:
