@@ -1,7 +1,6 @@
 from pytube import YouTube
 import os
 import streamlit as st
-from streamlit_extras.add_vertical_space import add_vertical_space
 with st.sidebar:
     st.title('YouTube Downloader')
 
@@ -19,9 +18,6 @@ with st.sidebar:
     - [pytube](https://pytube.io/)             
 
     ''')
-
-    add_vertical_space(5)
-    st.write('Made by [Dev Tobs](https://twitter.com/AnyigorTobias)')
 
 def Download():
     #add radio buttons and modify codes to allow user select the type of file needed
