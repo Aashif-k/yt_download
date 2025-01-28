@@ -3,7 +3,7 @@ from pydub import AudioSegment
 import streamlit as st
 import os
 
-def yt_down(video_url):
+def yt_down(link):
     try:
         # Create YouTube object
         yt = YouTube(video_url)
