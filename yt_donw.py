@@ -4,7 +4,6 @@ import streamlit as st
 import os
 
 def yt_down(video_url):
-    link=st.text_input(" ",placeholder="enter the url of the video")
     try:
         # Create YouTube object
         yt = YouTube(video_url)
@@ -28,6 +27,7 @@ def yt_down(video_url):
     except Exception as e:
         print(f'Error: {e}')
 def main():
+    link=st.text_input(" ",placeholder="enter the url of the video")
     yt_down(link)
 if __name__=='__main__':
   main()
