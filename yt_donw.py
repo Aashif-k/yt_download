@@ -6,7 +6,7 @@ import os
 def yt_down(link):
     try:
         # Create YouTube object
-        yt = YouTube(video_url)
+        yt = YouTube(link)
 
         # Get the highest resolution stream
         video_stream = yt.streams.filter(only_audio=True).first()
